@@ -20,7 +20,7 @@ const registerSubscription = async function (req, res) {
       }
 
       if (!validator.isValid(planId)) {
-        res.status(400).send({ status: false, msg: "title is required" });
+        res.status(400).send({ status: false, msg: "Plan Id is required" });
         return
       }
 
@@ -30,12 +30,12 @@ const registerSubscription = async function (req, res) {
       }
 
       if (!validator.isValid(startDate)) {
-        res.status(400).send({ status: false, msg: "title is required" });
+        res.status(400).send({ status: false, msg: "Start Date is required" });
         return
       }
 
       if (!validator.isValidStartDate(startDate)) {
-        res.status(400).send({ status: false, msg: "title is required" });
+        res.status(400).send({ status: false, msg: "Please select a valid start date" });
         return
       }
 
@@ -72,45 +72,87 @@ const registerSubscription = async function (req, res) {
 const getSubscriptionWithDate = async function (req, res) {
     try {
       let userName = req.params.userName;
-      let date = req.params.date;
+      let userDate = req.params.date;
       if (!validator.isValidRequestParam(userName)) {
         res.status(400).send({ status: false, msg: "user name is not valid" });
         return
       }
 
-      if (!validator.isValidRequestParam(date)) {
+      if (!validator.isValidRequestParam(userDate)) {
         res.status(400).send({ status: false, msg: "date is not valid" });
         return
       }
 
-      if (!validator.isValidStartDate(date)) {
+      if (!validator.isValidStartDate(userDate)) {
         res.status(400).send({ status: false, msg: "date is not valid" });
         return
       }
 
-      const currentSubscriptions = await subscriptionModel.find({userName: userName});
+      let currentSubscriptions = await subscriptionModel.find({userName: userName});
 
       if(currentSubscriptions)
       {
-        for(const i=0; i<currentSubscriptions.length;i++)
+        let details =[];
+        for(let i=0; i<currentSubscriptions.length;i++)
         {
-            var startedAt = currentSubscriptions[0].startDate.getTime(); //Get the number of milliseconds since January 1, 1970:
-            
-            var specific_date = new Date('2017-03-26');
-            var current_date = new Date();
-            if(current_date.getTime() > specific_date.getTime())
+            var startedAt = currentSubscriptions[i].startDate.getTime(); //Get the number of milliseconds since January 1, 1970:
+            let indexOfPlan = systemConfig.planIdEnumArray.indexOf(currentSubscriptions[i].planId);
+            let validity = systemConfig.planValidityEnumArray[indexOfPlan];
+            let validTill = startedAt + validity*24*60*60*1000;
+            let tempDate = new Date(userDate);
+            let userEnteredDate = tempDate.getTime();
+            let validDays = (validTill - userEnteredDate)/(24*60*60*1000);
+            if(validDays)
             {
-                console.log('current_date date is grater than specific_date')
-            }
-            else
-            {
-                console.log('current_date date is lower than specific_date')
+              let tempObj = { Plan_Id : `${currentSubscriptions[i].planId}`, Days_Left : `${validDays}`}
+              details.push(tempObj);
             }
         }
+        res.status(201).send({ status: true, data : details });
       }
-      res.status(201).send({ status: true, data: userDetails });
+      res.status(201).send({ status: true, msg: "No Active Subscriptions" });
     } catch (error) {
       res.status(500).send({ status: false, msg: error.message });
     }
   };
   
+
+  
+const getSubscription = async function (req, res) {
+  try {
+    let userName = req.params.userName;
+    if (!validator.isValidRequestParam(userName)) {
+      res.status(400).send({ status: false, msg: "user name is not valid" });
+      return
+    }
+
+    let currentSubscriptions = await subscriptionModel.find({userName: userName});
+
+    if(currentSubscriptions)
+    {
+      let details =[];
+      for(let i=0; i<currentSubscriptions.length;i++)
+      {
+          var startedAt = currentSubscriptions[i].startDate.getTime(); //Get the number of milliseconds since January 1, 1970:
+          const indexOfPlan = systemConfig.planIdEnumArray.indexOf(currentSubscriptions[i].planId);
+          let validity = systemConfig.planValidityEnumArray[indexOfPlan];
+          let validTill = startedAt + validity*24*60*60*1000;
+          let validDate = new Date(validTill);
+          let tempObj = { Plan_Id : `${currentSubscriptions[i].planId}`, Start_Date : `${currentSubscriptions[i].startDate}`, Valit_Till : `${validDate}` }
+          details.push(tempObj);
+      }
+      res.status(201).send({ status: true, data : details });
+    }
+    res.status(201).send({ status: true, msg: "No Active Subscriptions" });
+  } catch (error) {
+    res.status(500).send({ status: false, msg: error.message });
+  }
+};
+
+
+  
+module.exports = {
+  registerSubscription,
+  getSubscriptionWithDate,
+  getSubscription
+};

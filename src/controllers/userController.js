@@ -32,8 +32,14 @@ const getUser = async function (req, res) {
       res.status(400).send({ status: false, msg: "request param is not valid" });
       return
     }
-    const userDetails = await userModel.find({userName: userName});
-    res.status(201).send({ status: true, data: userDetails });
+    const userDetails = await userModel.findOne({userName: userName});
+    if(userDetails)
+    {
+      res.status(200).send({ status: true, data: userDetails });
+    }
+    else{
+      res.status(404).send({ status: false, msg: "User Name does not exist" });
+    }
   } catch (error) {
     res.status(500).send({ status: false, msg: error.message });
   }

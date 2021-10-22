@@ -2,9 +2,14 @@ const { systemConfig } = require("../configs");
 
 const dateRegex = /^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/;
 
+const isValidRequestBody = function (requestBody) {
+  return Object.keys(requestBody).length > 0;
+};
+
 const isValidStartDate = function (startDate) {
   return dateRegex.test(startDate);
 };
+
 
 const isValid = function (value) {
   if (typeof value === "undefined" || value === null) return false;
@@ -22,6 +27,7 @@ const isValidRequestParam = function (userName) {
 
 
 module.exports = {
+  isValidRequestBody,
   isValidStartDate,
   isValidRequestParam,
   isValidPlanId,
