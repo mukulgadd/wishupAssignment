@@ -36,3 +36,8 @@
     Register a new subscription for an existing user, with a specified plan and start date
     POST /subscription/
     GET /subscription/< username >/< date >
+
+## handaling active subscriptions:-
+    We could handle it in multiple ways:-
+    1. Starting the next subscription when the current subscription ends.
+    2. If we have multiple subscriptions then the active subscription will be the plan which is greater.

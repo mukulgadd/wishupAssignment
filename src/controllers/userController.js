@@ -17,8 +17,8 @@ const registerUser = async function (req, res) {
     //   return;
     // }
 
-    const createUser = await userModel.create({userName: userName});
-    res.status(201).send({ status: true, data: createUser });
+    const userCreated = await userModel.create({userName: userName});
+    res.status(201).send({ status: true, data: userCreated });
   } catch (error) {
     res.status(500).send({ status: false, msg: error.message });
   }
