@@ -1,0 +1,109 @@
+{
+	"info": {
+		"_postman_id": "cc2df41f-f4e7-4564-95ea-025bcc7c5747",
+		"name": "Wishup Assignmnet",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "POST Subscription",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userName\" : \"mukul\",\r\n    \"planId\" : \"FREE\",\r\n    \"startDate\" : \"2021-10-22\" \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/subscription",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"subscription"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT User",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTY2Yjc0MDBiMDI2NjQ0NTBlYTE0M2UiLCJpYXQiOjE2MzQxMjQ5MzMsImV4cCI6MTYzNDEyODUzM30.OQ8nF-cLv-Xto43xYR0_GrIUPrtF0IjTjNhAg9Ve8XY",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/user/mukul",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"mukul"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Subscription list",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/subscription/mukul",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"subscription",
+						"mukul"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Subscription With Date",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/subscription/mukul/2021-10-26",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"subscription",
+						"mukul",
+						"2021-10-26"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
